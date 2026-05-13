@@ -124,8 +124,8 @@ test('Начать заново resets all answers', async ({ page }) => {
 
   await page.getByTestId('restart-quiz-button-1-1').click();
 
-  // Result section gone
-  await expect(page.getByTestId('quiz-result-1-1')).not.toBeVisible();
+  // Result section absent from DOM (conditionally rendered)
+  await expect(page.getByTestId('quiz-result-1-1')).toHaveCount(0);
 
   // Questions re-rendered — no answers submitted
   await waitForCards(page);
@@ -185,8 +185,11 @@ test('wrong answer shows individual retry button that resets the card', async ({
     await expect(retryBtn).toBeVisible();
     await retryBtn.click();
 
-    await expect(card.locator(`[data-testid="feedback-${qId}"]`)).not.toBeVisible();
+    // Card remounted — feedback element absent from DOM, choices re-enabled
+    await expect(card.locator(`[data-testid="feedback-${qId}"]`)).toHaveCount(0);
     await expect(choices.first()).toBeEnabled();
     return;
   }
+
+  throw new Error('No MC card with a wrong first-choice found in lesson 1.1 easy — check question bank');
 });
