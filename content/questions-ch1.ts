@@ -183,5 +183,133 @@ export const questionsCh1 = [
   { questionId:'1.8-h-03', lessonId:'1.8', type:'multiple_choice', skill:'divisibility', difficulty:'hard', prompt:'Сколько делителей у числа 36?', choices:['7','8','9','6'], correctAnswer:'9', correctExplanation:'36=2²×3². Число делителей=(2+1)(2+1)=9.', wrongFeedback:{'7':'1,2,3,4,6,9,12,18,36.','8':'Пересчитай.','6':'Не хватает.'} },
   { questionId:'1.8-h-04', lessonId:'1.8', type:'numeric_input', skill:'multiples', difficulty:'hard', prompt:'НОК чисел 8, 12 и 18?', correctAnswer:'72', correctExplanation:'НОК(8,12,18)=72.' },
   { questionId:'1.8-h-05', lessonId:'1.8', type:'multiple_choice', skill:'divisibility', difficulty:'hard', prompt:'НОД(a,b) × НОК(a,b) = a × b?', choices:['Да, всегда','Нет, никогда','Только для простых','Только для чётных'], correctAnswer:'Да, всегда', correctExplanation:'Это фундаментальное свойство.', wrongFeedback:{'Нет, никогда':'Верно всегда.','Только для простых':'Для любых.','Только для чётных':'Для любых.'} },
-  { questionId:'1.8-h-06', lessonId:'1.8', type:'numeric_input', skill:'divisibility', difficulty:'hard', prompt:'Первое число ≥ 100, делящееся и на 6, и на 8.', correctAnswer:'120', correctExplanation:'НОК(6,8)=24. 24×5=120.' },
+  { questionId:'1.8-h-06', lessonId:'1.8', type:'numeric_input', skill:'divisibility', difficulty:'hard', prompt:'Первое число ≥ 100, делящееся и на 6, и на 8.', correctAnswer:'120', correctExplanation:'НОК(6,8)=24. 24×5=120.' },,
+
+  {"questionId":"1.1-e-09","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"easy","prompt":"Цифра в разряде единиц числа 8 052?","correctAnswer":"2","correctExplanation":"8052: 8-тыс, 0-сот, 5-дес, 2-ед."},
+
+  {"questionId":"1.1-e-10","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"easy","prompt":"Сколько десятков в числе 370?","correctAnswer":"37","correctExplanation":"370=37×10."},
+
+  {"questionId":"1.1-m-09","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"medium","prompt":"Какое число стоит между 4 999 и 5 001?","correctAnswer":"5000","correctExplanation":"5000."},
+
+  {"questionId":"1.1-m-10","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"medium","prompt":"Запиши число: 2 тысячи 5 единиц.","correctAnswer":"2005","correctExplanation":"2000+5=2005."},
+
+  {"questionId":"1.1-h-07","lessonId":"1.1","type":"multiple_choice","skill":"1_1","difficulty":"hard","prompt":"Сумма цифр числа 9 081?","choices":["16","17","18","19"],"correctAnswer":"18","correctExplanation":"9+0+8+1=18."},
+
+  {"questionId":"1.1-h-08","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"hard","prompt":"На сколько наибольшее 4-значное число больше наименьшего 4-значного?","correctAnswer":"8999","correctExplanation":"9999−1000=8999."},
+
+  {"questionId":"1.1-h-09","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"hard","prompt":"Сколько раз цифра 0 встречается в числах от 1 до 20?","correctAnswer":"2","correctExplanation":"10 и 20 — по одному нулю, итого 2."},
+
+  {"questionId":"1.1-h-10","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"hard","prompt":"Число 6 таусяч 0 сотен 0 десятков 4 единицы.","correctAnswer":"6004","correctExplanation":"6004."},
+
+  {"questionId":"1.2-e-09","lessonId":"1.2","type":"multiple_choice","skill":"1_2","difficulty":"easy","prompt":"Что больше: 1 001 или 1 100?","choices":["1 001","1 100","Они равны","Нельзя"],"correctAnswer":"1 100","correctExplanation":"Сотни: 1>0."},
+
+  {"questionId":"1.2-e-10","lessonId":"1.2","type":"multiple_choice","skill":"1_2","difficulty":"easy","prompt":"Наименьшее из чисел: 305, 350, 503, 530?","choices":["305","350","503","530"],"correctAnswer":"305","correctExplanation":"Сотни одинаковые → десятки: 0<5."},
+
+  {"questionId":"1.2-m-09","lessonId":"1.2","type":"multiple_choice","skill":"1_2","difficulty":"medium","prompt":"Вставь знак: 10 001 ○ 9 999","choices":["<",">","=","≥"],"correctAnswer":">","correctExplanation":"5 цифр > 4 цифры."},
+
+  {"questionId":"1.2-m-10","lessonId":"1.2","type":"numeric_input","skill":"1_2","difficulty":"medium","prompt":"Сколько четырёхзначных натуральных чисел?","correctAnswer":"9000","correctExplanation":"9999−1000+1=9000."},
+
+  {"questionId":"1.2-h-07","lessonId":"1.2","type":"numeric_input","skill":"1_2","difficulty":"hard","prompt":"Наибольшее число из 3 цифр 4, 7, 1 (каждую один раз)?","correctAnswer":"741","correctExplanation":"741."},
+
+  {"questionId":"1.2-h-08","lessonId":"1.2","type":"numeric_input","skill":"1_2","difficulty":"hard","prompt":"Наименьшее число из 3 цифр 4, 7, 1?","correctAnswer":"147","correctExplanation":"147."},
+
+  {"questionId":"1.2-h-09","lessonId":"1.2","type":"numeric_input","skill":"1_2","difficulty":"hard","prompt":"Сколько целых чисел больше 10 и меньше 20?","correctAnswer":"9","correctExplanation":"11…19 — девять."},
+
+  {"questionId":"1.2-h-10","lessonId":"1.2","type":"numeric_input","skill":"1_2","difficulty":"hard","prompt":"На числовой оси между 0 и 1 000 000 сколько натуральных чисел?","correctAnswer":"999999","correctExplanation":"1…999999."},
+
+  {"questionId":"1.3-e-09","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"easy","prompt":"Округли 95 до десятков.","correctAnswer":"100","correctExplanation":"Единица=5≥5→100."},
+
+  {"questionId":"1.3-e-10","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"easy","prompt":"Округли 320 до сотен.","correctAnswer":"300","correctExplanation":"Десятки=2<5→300."},
+
+  {"questionId":"1.3-m-09","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"medium","prompt":"Округли 1 999 до тысяч.","correctAnswer":"2000","correctExplanation":"Сотни=9≥5→2000."},
+
+  {"questionId":"1.3-m-10","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"medium","prompt":"Округли 49 до десятков.","correctAnswer":"50","correctExplanation":"Единица=9≥5→50."},
+
+  {"questionId":"1.3-h-07","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"hard","prompt":"Округлили до десятков, получили 60. Наибольшее исходное число?","correctAnswer":"64","correctExplanation":"55…64→60."},
+
+  {"questionId":"1.3-h-08","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"hard","prompt":"Округли 999 999 до тысяч.","correctAnswer":"1000000","correctExplanation":"999→1000."},
+
+  {"questionId":"1.3-h-09","lessonId":"1.3","type":"multiple_choice","skill":"1_3","difficulty":"hard","prompt":"Два разных числа округляются до 500. Максимальная разница между ними?","choices":["98","99","100","101"],"correctAnswer":"99","correctExplanation":"451…549→500. Разница 549−451=98. Нет: 549−450=99."},
+
+  {"questionId":"1.3-h-10","lessonId":"1.3","type":"numeric_input","skill":"1_3","difficulty":"hard","prompt":"Округли 3 500 до тысяч.","correctAnswer":"4000","correctExplanation":"Сотни=5≥5→4000."},
+
+  {"questionId":"1.4-e-09","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"easy","prompt":"500 + 499 = ?","correctAnswer":"999","correctExplanation":"999."},
+
+  {"questionId":"1.4-e-10","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"easy","prompt":"1 000 − 750 = ?","correctAnswer":"250","correctExplanation":"250."},
+
+  {"questionId":"1.4-m-09","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"medium","prompt":"Найди неизвестное: □ + 345 = 1000","correctAnswer":"655","correctExplanation":"1000−345=655."},
+
+  {"questionId":"1.4-m-10","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"medium","prompt":"Длина трёх отрезков: 123, 456, 789 см. Сумма?","correctAnswer":"1368","correctExplanation":"1368 см."},
+
+  {"questionId":"1.4-h-07","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"hard","prompt":"(1000−1)+(1000−2)+(1000−3) = ?","correctAnswer":"2994","correctExplanation":"3000−6=2994."},
+
+  {"questionId":"1.4-h-08","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"hard","prompt":"Разность двух чисел 234. Меньшее 567. Большее?","correctAnswer":"801","correctExplanation":"567+234=801."},
+
+  {"questionId":"1.4-h-09","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"hard","prompt":"1+2+3+...+100 = ?","correctAnswer":"5050","correctExplanation":"100×101/2=5050."},
+
+  {"questionId":"1.4-h-10","lessonId":"1.4","type":"numeric_input","skill":"1_4","difficulty":"hard","prompt":"Из суммы 2000 вычли два числа: 789 и 432. Остаток?","correctAnswer":"779","correctExplanation":"2000−789−432=779."},
+
+  {"questionId":"1.5-e-09","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"easy","prompt":"4² = ?","correctAnswer":"16","correctExplanation":"4×4=16."},
+
+  {"questionId":"1.5-e-10","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"easy","prompt":"6² = ?","correctAnswer":"36","correctExplanation":"6×6=36."},
+
+  {"questionId":"1.5-m-09","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"medium","prompt":"Найди n: n² = 64.","correctAnswer":"8","correctExplanation":"8²=64."},
+
+  {"questionId":"1.5-m-10","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"medium","prompt":"2³ + 3² = ?","correctAnswer":"17","correctExplanation":"8+9=17."},
+
+  {"questionId":"1.5-h-07","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"hard","prompt":"Площадь квадрата со стороной 9?","correctAnswer":"81","correctExplanation":"9²=81."},
+
+  {"questionId":"1.5-h-08","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"hard","prompt":"n³ = 125. n = ?","correctAnswer":"5","correctExplanation":"5³=125."},
+
+  {"questionId":"1.5-h-09","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"hard","prompt":"5² − 4² = ?","correctAnswer":"9","correctExplanation":"25−16=9."},
+
+  {"questionId":"1.5-h-10","lessonId":"1.5","type":"numeric_input","skill":"1_5","difficulty":"hard","prompt":"Куб со стороной 4. Объём?","correctAnswer":"64","correctExplanation":"4³=64."},
+
+  {"questionId":"1.6-e-09","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"easy","prompt":"8 × 8 = ?","correctAnswer":"64","correctExplanation":"64."},
+
+  {"questionId":"1.6-e-10","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"easy","prompt":"63 ÷ 7 = ?","correctAnswer":"9","correctExplanation":"9."},
+
+  {"questionId":"1.6-m-09","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"medium","prompt":"Найди: 144 ÷ 12 = ?","correctAnswer":"12","correctExplanation":"12."},
+
+  {"questionId":"1.6-m-10","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"medium","prompt":"25 × 8 = ?","correctAnswer":"200","correctExplanation":"200."},
+
+  {"questionId":"1.6-h-07","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"hard","prompt":"1 111 × 9 = ?","correctAnswer":"9999","correctExplanation":"9999."},
+
+  {"questionId":"1.6-h-08","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"hard","prompt":"256 ÷ 16 = ?","correctAnswer":"16","correctExplanation":"16."},
+
+  {"questionId":"1.6-h-09","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"hard","prompt":"48 × 52 = ? (используй (50−2)(50+2))","correctAnswer":"2496","correctExplanation":"50²−4=2496."},
+
+  {"questionId":"1.6-h-10","lessonId":"1.6","type":"numeric_input","skill":"1_6","difficulty":"hard","prompt":"Найди x: 15x = 225","correctAnswer":"15","correctExplanation":"225÷15=15."},
+
+  {"questionId":"1.7-e-09","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"easy","prompt":"15 − 3 × 4 = ?","correctAnswer":"3","correctExplanation":"3×4=12; 15−12=3."},
+
+  {"questionId":"1.7-e-10","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"easy","prompt":"(8 + 2) × 3 = ?","correctAnswer":"30","correctExplanation":"10×3=30."},
+
+  {"questionId":"1.7-m-09","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"medium","prompt":"2 × (3 + 4²) = ?","correctAnswer":"38","correctExplanation":"4²=16; 3+16=19; 2×19=38."},
+
+  {"questionId":"1.7-m-10","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"medium","prompt":"Вычисли: 50 − (3 + 2) × 7","correctAnswer":"15","correctExplanation":"5×7=35; 50−35=15."},
+
+  {"questionId":"1.7-h-07","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"hard","prompt":"(2³ + 2²) ÷ (2² − 2) = ?","correctAnswer":"6","correctExplanation":"12÷2=6."},
+
+  {"questionId":"1.7-h-08","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"hard","prompt":"100 ÷ (2 × 5) + 3² = ?","correctAnswer":"19","correctExplanation":"10+9=19."},
+
+  {"questionId":"1.7-h-09","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"hard","prompt":"Вычисли: 5 × (4 − 1)² − 10","correctAnswer":"35","correctExplanation":"5×9−10=35."},
+
+  {"questionId":"1.7-h-10","lessonId":"1.7","type":"numeric_input","skill":"1_7","difficulty":"hard","prompt":"Вычисли: (10 − 2³) × (1 + 3²)","correctAnswer":"20","correctExplanation":"2×10=20."},
+
+  {"questionId":"1.8-e-09","lessonId":"1.8","type":"multiple_choice","skill":"1_8","difficulty":"easy","prompt":"Является ли 7 простым числом?","choices":["Да","Нет","Иногда","Нельзя"],"correctAnswer":"Да","correctExplanation":"7 делится только на 1 и 7."},
+
+  {"questionId":"1.8-e-10","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"easy","prompt":"НОД(8, 12) = ?","correctAnswer":"4","correctExplanation":"4."},
+
+  {"questionId":"1.8-m-09","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"medium","prompt":"Сколько простых чисел до 10?","correctAnswer":"4","correctExplanation":"2,3,5,7 — четыре."},
+
+  {"questionId":"1.8-m-10","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"medium","prompt":"НОК(6, 9) = ?","correctAnswer":"18","correctExplanation":"18."},
+
+  {"questionId":"1.8-h-07","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"hard","prompt":"НОД(48, 72) = ?","correctAnswer":"24","correctExplanation":"24."},
+
+  {"questionId":"1.8-h-08","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"hard","prompt":"НОК(4, 6, 9) = ?","correctAnswer":"36","correctExplanation":"36."},
+
+  {"questionId":"1.8-h-09","lessonId":"1.8","type":"numeric_input","skill":"1_8","difficulty":"hard","prompt":"Простых чисел от 10 до 20 сколько?","correctAnswer":"4","correctExplanation":"11,13,17,19."},
+
+  {"questionId":"1.8-h-10","lessonId":"1.8","type":"multiple_choice","skill":"1_8","difficulty":"hard","prompt":"Число делится на 2 и на 3. Делится ли оно на 6?","choices":["Да, всегда","Нет","Только для чётных","Нельзя определить"],"correctAnswer":"Да, всегда","correctExplanation":"НОК(2,3)=6."}
 ];
