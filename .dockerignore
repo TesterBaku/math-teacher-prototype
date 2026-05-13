@@ -7,3 +7,9 @@ test-results/
 playwright-report/
 coverage/
 *.log
+.env
+.env.*
+.env*.local
+*.md
+start.bat
+start.sh
