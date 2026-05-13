@@ -64,9 +64,10 @@ app/
   lessons/page.tsx        All lessons grouped by chapter
   lessons/[lessonId]/     Lesson detail
   quiz/[lessonId]/        Quiz — 10 questions per tier, randomised each session
-components/               QuizCard, ProgressBar, FeedbackBox
+components/               QuizCard, ProgressBar, FeedbackBox, LessonVisual, RoundingVisual
 content/
   lessons.ts              Lesson metadata (title, chapter, time estimate)
+  questions-types.ts      Shared Question type used by all chapter files
   questions.ts            Question bank wiring + getQuizQuestions()
   questions-ch1.ts … ch8.ts   1 710 questions total (10 per tier per lesson)
 lib/
@@ -82,7 +83,7 @@ tests/
 
 **Unit tests** (fast, no browser):
 ```bash
-npx playwright test -c playwright.unit.config.ts
+npm run test:unit
 ```
 
 **E2E tests** (headless browser, auto-builds and starts the server):
