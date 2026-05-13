@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import ProgressBar from '@/components/ProgressBar';
 import QuizCard from '@/components/QuizCard';
@@ -24,7 +24,7 @@ function QuizContent() {
 
   const lessonId = params?.lessonId ?? '';
   const lesson = getLesson(lessonId);
-  const lessonDomId = lessonId.replace('.', '-');
+  const lessonDomId = lessonId.replaceAll('.', '-');
 
   const initialType = (searchParams.get('type') as QuizType) || 'easy';
   const [quizType, setQuizType] = useState<QuizType>(initialType);
@@ -36,11 +36,14 @@ function QuizContent() {
   // Questions generated only on the client: Math.random() differs between server/client renders,
   // so initialising with [] avoids a hydration mismatch that would detach DOM elements.
   const [allQuestions, setAllQuestions] = useState<ReturnType<typeof getQuizQuestions>>([]);
+  const isFirstMount = useRef(true);
   useEffect(() => {
     setAllQuestions(getQuizQuestions(lessonId, quizType));
     setAnswers({});
     setRetryWrongOnly(false);
-    setQuizKey((k) => k + 1);
+    // Don't bump quizKey on the initial mount — no QuizCards exist yet to remount.
+    if (!isFirstMount.current) setQuizKey((k) => k + 1);
+    isFirstMount.current = false;
   }, [lessonId, quizType]);
 
   const wrongQuestionIds = useMemo(
@@ -62,6 +65,8 @@ function QuizContent() {
   }
 
   function resetQuiz() {
+    // Safe to call Math.random() here: resetQuiz runs only on the client in response to
+    // a user click, so there is no server/client hydration mismatch risk.
     setAllQuestions(getQuizQuestions(lessonId, quizType));
     setAnswers({});
     setRetryWrongOnly(false);
@@ -70,14 +75,14 @@ function QuizContent() {
 
   function handleQuizTypeChange(newType: QuizType) {
     setQuizType(newType);
-    // useEffect handles question refresh and state reset when quizType changes
+    // useEffect([lessonId, quizType]) handles question refresh and state reset
   }
 
   if (!lesson) {
     return (
       <div id={`quiz-not-found-${lessonDomId}`} data-testid={`quiz-not-found-${lessonDomId}`} className="math-card p-6">
         <h1 className="text-2xl font-bold">Урок не найден</h1>
-        <Link href="/lessons" className="mt-4 inline-flex text-blue-700">← К урокам</Link>
+        <Link id={`quiz-not-found-back-${lessonDomId}`} data-testid={`quiz-not-found-back-${lessonDomId}`} href="/lessons" className="mt-4 inline-flex text-blue-700">← К урокам</Link>
       </div>
     );
   }

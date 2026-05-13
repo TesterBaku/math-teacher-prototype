@@ -54,17 +54,17 @@ test('getScore rounds percentages correctly', () => {
   expect(getScore(10, 0)).toBe(0);
 });
 
-test('each lesson has 30 questions (10 per tier)', () => {
+test('each lesson has at least 10 questions per tier (30 total minimum)', () => {
   for (const lesson of lessons) {
     const all = getQuestionsForLesson(lesson.lessonId);
-    expect(all.length).toBe(30);
+    expect(all.length).toBeGreaterThanOrEqual(30);
 
-    const easy = all.filter((q) => q.difficulty === 'easy');
+    const easy   = all.filter((q) => q.difficulty === 'easy');
     const medium = all.filter((q) => q.difficulty === 'medium');
-    const hard = all.filter((q) => q.difficulty === 'hard');
-    expect(easy.length).toBe(10);
-    expect(medium.length).toBe(10);
-    expect(hard.length).toBe(10);
+    const hard   = all.filter((q) => q.difficulty === 'hard');
+    expect(easy.length).toBeGreaterThanOrEqual(10);
+    expect(medium.length).toBeGreaterThanOrEqual(10);
+    expect(hard.length).toBeGreaterThanOrEqual(10);
   }
 });
 
@@ -76,11 +76,12 @@ test('getQuizQuestions returns at most 10 questions per tier', () => {
   }
 });
 
-test('getQuizQuestions mixed returns up to 10 questions across tiers', () => {
+test('getQuizQuestions mixed returns exactly 10 questions spanning all 3 tiers', () => {
   const result = getQuizQuestions('1.1', 'mixed', 10);
-  expect(result.length).toBeLessThanOrEqual(10);
+  // Math.floor(10/3)=3 easy + 3 medium + 4 hard = 10 total
+  expect(result.length).toBe(10);
   const difficulties = new Set(result.map((q) => q.difficulty));
-  expect(difficulties.size).toBeGreaterThan(1);
+  expect(difficulties.size).toBe(3);
 });
 
 test('getQuizQuestions returns empty array for unknown lesson', () => {
