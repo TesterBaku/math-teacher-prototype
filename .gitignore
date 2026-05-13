@@ -15,9 +15,21 @@ next-env.d.ts
 # Testing
 test-results/
 playwright-report/
+coverage/
+
+# Task notes (local planning files, not source)
+tasks/
 
 # Claude Code local config
 .claude/
+
+# Deployment
+.vercel
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Misc
 .env
@@ -26,3 +38,4 @@ playwright-report/
 .env.test.local
 .env.production.local
 .DS_Store
+Thumbs.db
