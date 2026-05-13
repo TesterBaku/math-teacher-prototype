@@ -1,48 +1,103 @@
-# Math Teacher Prototype
+# Математика 5 класс — интерактивный прототип
 
-A small Next.js prototype for teaching Grade 5 math lessons with:
+Interactive lesson and quiz prototype for Grade 5 mathematics (Russian curriculum).  
+57 lessons across 8 chapters — explanations, visual examples, and tiered quizzes (easy / medium / hard / mixed) with per-mistake feedback.
 
-- short lesson explanations;
-- visual examples;
-- quiz questions;
-- immediate feedback;
-- mistake-specific explanations;
-- retry mode for wrong answers.
+---
 
-## Current scope
+## Running the prototype
 
-Implemented content:
+### Option A — Docker (recommended, no Node.js required)
 
-- All lesson topics from Part 1 and core Part 2 chapters (lesson IDs `1.1` to `8.3`)
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 
-## Run locally
+```bash
+git clone https://github.com/TesterBaku/math-teacher-prototype.git
+cd math-teacher-prototype
+docker compose up --build
+```
+
+Open **http://localhost:3000**.  
+Stop with `Ctrl+C`. On subsequent runs (no source changes) skip the `--build`:
+
+```bash
+docker compose up
+```
+
+---
+
+### Option B — Node.js launch scripts (no Docker required)
+
+**Prerequisites:** [Node.js 18+](https://nodejs.org) installed.
+
+**Windows:**
+```
+start.bat
+```
+
+**macOS / Linux:**
+```bash
+chmod +x start.sh && ./start.sh
+```
+
+On first run the script installs dependencies and builds; subsequent runs start immediately.  
+Open **http://localhost:3000**.
+
+---
+
+### Option C — Development mode (live reload)
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open:
+Open **http://localhost:3000**. Source changes reload automatically.
 
-```text
-http://localhost:3000
+---
+
+## Project structure
+
+```
+app/
+  page.tsx                Home page
+  lessons/page.tsx        All lessons grouped by chapter
+  lessons/[lessonId]/     Lesson detail
+  quiz/[lessonId]/        Quiz — 10 questions per tier, randomised each session
+components/               QuizCard, ProgressBar, FeedbackBox, LessonVisual, RoundingVisual
+content/
+  lessons.ts              Lesson metadata (title, chapter, time estimate)
+  questions-types.ts      Shared Question type used by all chapter files
+  questions.ts            Question bank wiring + getQuizQuestions()
+  questions-ch1.ts … ch8.ts   1 710 questions total (10 per tier per lesson)
+lib/
+  quiz.ts                 normalizeAnswer, isCorrectAnswer, getFeedback, getScore
+tests/
+  unit/                   Logic tests — no browser, no server
+  e2e/                    Full browser tests (navigation, quiz flow, all buttons)
 ```
 
-## Important files
+---
 
-```text
-content/lessons.ts       Lesson metadata and explanations
-content/questions.ts     Quiz question bank
-components/QuizCard.tsx  Main quiz interaction
-components/FeedbackBox.tsx  Correct/wrong explanation UI
-components/RoundingVisual.tsx  Visual example for rounding
-lib/quiz.ts              Answer normalization and scoring
+## Running tests
+
+**Unit tests** (fast, no browser):
+```bash
+npm run test:unit
 ```
 
-## Next steps
+**E2E tests** (headless browser, auto-builds and starts the server):
+```bash
+npm run test:functional
+```
 
-1. Add final questions for Lesson 1.1.
-2. Add final questions for Lesson 1.2.
-3. Add AI tutor button after static feedback works well.
-4. Add localStorage progress persistence.
-5. Test with one student and revise explanations.
+**All tests:**
+```bash
+npm test
+```
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming, PR workflow, and merge rules.
