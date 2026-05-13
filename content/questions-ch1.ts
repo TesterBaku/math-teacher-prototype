@@ -183,7 +183,7 @@ export const questionsCh1 = [
   { questionId:'1.8-h-03', lessonId:'1.8', type:'multiple_choice', skill:'divisibility', difficulty:'hard', prompt:'Сколько делителей у числа 36?', choices:['7','8','9','6'], correctAnswer:'9', correctExplanation:'36=2²×3². Число делителей=(2+1)(2+1)=9.', wrongFeedback:{'7':'1,2,3,4,6,9,12,18,36.','8':'Пересчитай.','6':'Не хватает.'} },
   { questionId:'1.8-h-04', lessonId:'1.8', type:'numeric_input', skill:'multiples', difficulty:'hard', prompt:'НОК чисел 8, 12 и 18?', correctAnswer:'72', correctExplanation:'НОК(8,12,18)=72.' },
   { questionId:'1.8-h-05', lessonId:'1.8', type:'multiple_choice', skill:'divisibility', difficulty:'hard', prompt:'НОД(a,b) × НОК(a,b) = a × b?', choices:['Да, всегда','Нет, никогда','Только для простых','Только для чётных'], correctAnswer:'Да, всегда', correctExplanation:'Это фундаментальное свойство.', wrongFeedback:{'Нет, никогда':'Верно всегда.','Только для простых':'Для любых.','Только для чётных':'Для любых.'} },
-  { questionId:'1.8-h-06', lessonId:'1.8', type:'numeric_input', skill:'divisibility', difficulty:'hard', prompt:'Первое число ≥ 100, делящееся и на 6, и на 8.', correctAnswer:'120', correctExplanation:'НОК(6,8)=24. 24×5=120.' },,
+  { questionId:'1.8-h-06', lessonId:'1.8', type:'numeric_input', skill:'divisibility', difficulty:'hard', prompt:'Первое число ≥ 100, делящееся и на 6, и на 8.', correctAnswer:'120', correctExplanation:'НОК(6,8)=24. 24×5=120.' },
 
   {"questionId":"1.1-e-09","lessonId":"1.1","type":"numeric_input","skill":"1_1","difficulty":"easy","prompt":"Цифра в разряде единиц числа 8 052?","correctAnswer":"2","correctExplanation":"8052: 8-тыс, 0-сот, 5-дес, 2-ед."},
 
