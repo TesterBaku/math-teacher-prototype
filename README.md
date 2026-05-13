@@ -30,10 +30,7 @@ docker compose up
 
 **Prerequisites:** [Node.js 18+](https://nodejs.org) installed.
 
-**Windows:**
-```
-start.bat
-```
+**Windows:** double-click `start.bat` (or run it in a terminal).
 
 **macOS / Linux:**
 ```bash
@@ -41,7 +38,8 @@ chmod +x start.sh && ./start.sh
 ```
 
 On first run the script installs dependencies and builds; subsequent runs start immediately.  
-Open **http://localhost:3000**.
+The browser opens **http://localhost:3000** automatically after a few seconds.  
+If the server stops for any reason the window stays open so you can read the error.
 
 ---
 
