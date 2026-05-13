@@ -46,15 +46,9 @@ for (const q of questions) {
   questionsByLesson[q.lessonId][q.difficulty].push(q);
 }
 
-function sampleOrRepeat<T>(arr: T[], count: number): T[] {
-  if (arr.length === 0) return [];
-  if (arr.length >= count) {
-    const shuffled = [...arr].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
-  }
-  const result: T[] = [];
-  while (result.length < count) result.push(...arr);
-  return result.slice(0, count);
+function sample<T>(arr: T[], count: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
 }
 
 export type QuizType = 'easy' | 'medium' | 'hard' | 'mixed';
@@ -63,16 +57,17 @@ export function getQuestionsForLesson(lessonId: string): Question[] {
   return questions.filter((q) => q.lessonId === lessonId);
 }
 
-export function getQuizQuestions(lessonId: string, quizType: QuizType = 'easy', count = 20): Question[] {
+export function getQuizQuestions(lessonId: string, quizType: QuizType = 'easy', count = 10): Question[] {
   const byDiff = questionsByLesson[lessonId];
   if (!byDiff) return [];
   if (quizType === 'mixed') {
-    const easy = sampleOrRepeat(byDiff.easy, Math.floor(count / 3));
-    const medium = sampleOrRepeat(byDiff.medium, Math.floor(count / 3));
-    const hard = sampleOrRepeat(byDiff.hard, count - easy.length - medium.length);
+    const perTier = Math.floor(count / 3);
+    const easy = sample(byDiff.easy, perTier);
+    const medium = sample(byDiff.medium, perTier);
+    const hard = sample(byDiff.hard, count - easy.length - medium.length);
     return [...easy, ...medium, ...hard].sort(() => Math.random() - 0.5);
   }
-  return sampleOrRepeat(byDiff[quizType], count);
+  return sample(byDiff[quizType], count);
 }
 
 // unused export kept for the lesson page

@@ -24,8 +24,7 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<AnswerState>({});
   const [retryWrongOnly, setRetryWrongOnly] = useState(false);
 
-  // Always get 20 questions for the selected quiz type
-  const allQuestions = getQuizQuestions(lessonId, quizType, 20);
+  const allQuestions = getQuizQuestions(lessonId, quizType);
 
   const wrongQuestionIds = useMemo(
     () => Object.entries(answers).filter(([, value]) => !value.isCorrect).map(([questionId]) => questionId),
