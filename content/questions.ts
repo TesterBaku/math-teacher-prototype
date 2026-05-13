@@ -24,7 +24,9 @@ export type Question = {
   helperText?: string;
 };
 
-export const questions: Question[] = [
+// ch2–ch8 are generated via JSON.stringify, so TypeScript widens 'type' and
+// 'difficulty' to string. The cast is safe — the generator enforces the values.
+export const questions = [
   ...questionsCh1,
   ...questionsCh2,
   ...questionsCh3,
@@ -33,7 +35,7 @@ export const questions: Question[] = [
   ...questionsCh6,
   ...questionsCh7,
   ...questionsCh8,
-];
+] as Question[];
 
 // Group by lessonId and difficulty
 const questionsByLesson: Record<string, Record<'easy' | 'medium' | 'hard', Question[]>> = {};
