@@ -31,14 +31,16 @@ content/15-add-ch5-questions          →  content: add 10 questions per tier fo
 ## Workflow
 
 ```
-1. Cut branch      →  git checkout -b feature/42-my-feature
-2. Make changes    →  commit with clear messages
-3. Push & open PR  →  gh pr create ...
-4. Code review     →  independent reviewer via /ultrareview or code-reviewer agent
-5. Address notes   →  push fixes to the same branch
-6. Re-review       →  reviewer confirms fixes are addressed
-7. Merge           →  squash-merge into master
-8. Delete branch   →  git branch -d feature/42-my-feature
+1. Cut branch         →  git checkout -b feature/42-my-feature
+2. Make changes       →  commit with clear messages
+3. Push & open PR     →  gh pr create ...
+4. Auto-review        →  immediately spawn code-reviewer subagent (mandatory)
+5. Address notes      →  push fixes to the same branch
+6. Re-spawn reviewer  →  spawn code-reviewer subagent again
+7. Loop               →  repeat (5)+(6) until reviewer returns zero comments
+8. Chat approval      →  ask the maintainer to approve in chat
+9. Merge              →  squash-merge into master (only after chat approval)
+10. Delete branch     →  git branch -d feature/42-my-feature
 ```
 
 ### Step 3 – PR format
@@ -64,12 +66,12 @@ EOF
 
 > The checklist items are **merge gates** — a PR should not be merged until all boxes are ticked.
 
-### Step 4 – Review
+### Step 4 – Auto-review (mandatory, automatic)
 
-Run `/ultrareview` in Claude Code **or** spawn a `code-reviewer` subagent with the PR number:
+The instant a PR is opened, spawn a `code-reviewer` subagent with the PR number — **without waiting to be asked**. Reviews are not on-demand; they are part of the PR-open action itself.
 
 ```
-/ultrareview <PR#>
+Agent({ subagent_type: "code-reviewer", prompt: "Review PR #<N> ..." })
 ```
 
 The reviewer checks:
@@ -77,31 +79,37 @@ The reviewer checks:
 - TypeScript types
 - No regressions in existing behaviour
 - Code style consistency
+- Security and supply-chain concerns where relevant
 
 ### Step 5 – Addressing review comments
 
 - Push new commits to the **same branch** (do not open a new PR)
-- Reply to each comment explaining what was changed or why it was rejected
-- Re-request review via the GitHub UI
+- For each comment: either fix it, or reply explaining the dismissal with concrete justification
 
-### Step 6 – Re-review
+### Step 6 – Re-spawn the reviewer
 
-The original reviewer re-runs `/ultrareview <PR#>` (or reviews the diff) and confirms:
-- Each comment is resolved or explicitly dismissed with justification
-- No new issues introduced by the fix commits
+After pushing fixes, re-spawn a fresh `code-reviewer` subagent with the same PR number. Do **not** assume previous review state — give it the current diff cold so it catches regressions introduced by the fixes.
 
-Only after this step can the PR be merged.
+### Step 7 – Loop until clean
 
-### Step 7 – Merge rules
+Repeat steps 5–6 until the reviewer returns **zero remaining comments**. There is no manual exit condition — the reviewer's verdict is the gate.
 
-- ✅ All reviewer comments resolved and confirmed
+### Step 8 – Chat approval (the human gate)
+
+Once the reviewer is satisfied, post a concise summary in chat and **explicitly ask the maintainer to approve the merge**. Wait for an explicit "yes / approved / merge it" in chat. Do not infer approval from silence or from earlier instructions.
+
+### Step 9 – Merge rules
+
+- ✅ Reviewer subagent returned zero comments on the most recent run
+- ✅ Maintainer has approved the merge in chat (this PR, this commit)
 - ✅ `npx tsc --noEmit` passes with zero errors
 - ✅ No duplicate questionIds
 - ✅ UI changes verified in browser
 - 🚫 Force-push to `master` is forbidden
 - 🚫 Direct push to `master` is forbidden
+- 🚫 GitHub approving review is **not** used as a gate — the maintainer reviews on `master` and would have to self-approve, which GitHub blocks. Chat approval replaces it.
 
-### Step 8 – Clean up
+### Step 10 – Clean up
 
 ```bash
 git checkout master
@@ -135,7 +143,7 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 
 `master` is protected:
 - Require pull request before merging
-- Require at least 1 approving review
-- Dismiss stale reviews when new commits are pushed
+- **No GitHub approving review is required** (the maintainer is the sole reviewer on `master` and GitHub blocks self-approval — chat approval per §8 replaces it)
 - Block direct pushes
 - Block force-pushes
+- Block branch deletion
