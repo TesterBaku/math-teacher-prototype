@@ -73,9 +73,10 @@ test.describe('start.sh — guards against past regressions', () => {
   test('runs with -e, -u, and pipefail enabled (in any idiomatic form)', () => {
     // Accept both `set -euo pipefail` (combined) and the split form
     // `set -e; set -u; set -o pipefail` — all semantically equivalent.
-    expect(startSh, '-e (errexit) must be set').toMatch(/set\s+-[a-z]*e[a-z]*\b/);
-    expect(startSh, '-u (nounset) must be set').toMatch(/set\s+-[a-z]*u[a-z]*\b/);
-    expect(startSh, 'pipefail must be set').toMatch(/set\s+-o\s+pipefail\b|set\s+-[a-z]*o[a-z]+\s+pipefail|pipefail/);
+    // Anchored to line-start `set` so a comment / string mention doesn't pass.
+    expect(startSh, '-e (errexit) must be set').toMatch(/^\s*set\s+-[a-z]*e[a-z]*\b/m);
+    expect(startSh, '-u (nounset) must be set').toMatch(/^\s*set\s+-[a-z]*u[a-z]*\b/m);
+    expect(startSh, 'pipefail must be set').toMatch(/^\s*set\s+-o\s+pipefail\b|^\s*set\s+-[a-z]*o[a-z]+\s+pipefail\b/m);
   });
 
   test('every indirect expansion uses a default (set -u safe)', () => {
@@ -145,7 +146,7 @@ test.describe('start scripts — shared invariants', () => {
     // start.bat accepts both `set NAME=value` and `set "NAME=value"`.
     // start.sh accepts both unquoted and quoted assignment.
     const batVer = startBat.match(/^\s*set\s+"?NODE_VERSION=([^\s"]+)"?/im)?.[1];
-    const shVer = startSh.match(/^\s*NODE_VERSION\s*=\s*"?([^"\s]+)"?/m)?.[1];
+    const shVer = startSh.match(/^\s*NODE_VERSION\s*=\s*['"]?([^'"\s]+)['"]?/m)?.[1];
     expect(batVer, 'start.bat NODE_VERSION').toBeTruthy();
     expect(shVer, 'start.sh NODE_VERSION').toBeTruthy();
     expect(batVer).toBe(shVer);
