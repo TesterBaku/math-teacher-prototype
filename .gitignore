@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Portable Node.js runtime auto-downloaded by start.bat / start.sh
+node-portable/
+
 # Next.js
 .next/
 out/
