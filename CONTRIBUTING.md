@@ -70,7 +70,9 @@ EOF
 
 ### Step 4 – Auto-review (mandatory, automatic)
 
-The instant a PR is opened, spawn a `code-reviewer` subagent with the PR number — **without waiting to be asked**. Reviews are not on-demand; they are part of the PR-open action itself. Same rule applies to in-flight PRs opened under the prior workflow: from the next push forward they follow these rules.
+The instant a PR is opened, spawn a `code-reviewer` subagent with the PR number — **without waiting to be asked**. Reviews are not on-demand; they are part of the PR-open action itself.
+
+**In-flight PRs opened under the prior workflow** don't need a retroactive Step 4 auto-spawn. Instead, treat the next push to such a PR as a Step 5 fix-push and run Step 6 (re-spawn the reviewer) on it. From that point forward they follow the loop in Steps 5–7.
 
 Invoke it from chat (or programmatically — the form below is illustrative):
 
@@ -88,7 +90,7 @@ The reviewer checks:
 ### Step 5 – Addressing review comments
 
 - Push new commits to the **same branch** (do not open a new PR)
-- For each comment: either fix it, or reply explaining the dismissal with concrete justification
+- For each comment: either fix it, or post a reply **in the PR thread** (not in chat, not in the commit message) explaining the dismissal with concrete justification. The PR-thread location matters for the §Step 7 override path.
 
 ### Step 6 – Re-spawn the reviewer
 
@@ -96,7 +98,13 @@ After pushing fixes, re-spawn a fresh `code-reviewer` subagent with the same PR 
 
 ### Step 7 – Loop until clean
 
-Repeat steps 5–6 until the reviewer returns **zero remaining comments**. The reviewer's verdict is the gate, with one override: if a comment is dismissed with concrete justification posted in the PR thread and a re-spawned reviewer raises the *same* point again, the maintainer may explicitly waive it in chat approval (§Step 8) — that waiver counts as resolved for that specific recurring comment only.
+Repeat steps 5–6 until the reviewer returns **zero remaining comments**. The reviewer's verdict is the gate, with one narrow override:
+
+- The earlier dismissal was posted in the PR thread per §Step 5 (not in chat, not in a commit message), AND
+- A re-spawned reviewer raises a comment that is *semantically* the same concern as the dismissed one (same underlying claim, even if reworded — not a new wrinkle on the same code), AND
+- The maintainer explicitly waives that specific recurring comment in their §Step 8 chat approval (e.g. "merge it, waiving the X comment").
+
+All three conditions must hold. The waiver applies only to that specific recurring comment, not as a blanket dismissal of future reviewer findings.
 
 ### Step 8 – Chat approval (the human gate)
 
