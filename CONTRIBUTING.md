@@ -57,7 +57,9 @@ One paragraph: what changed and why.
 ## Checklist
 - [ ] TypeScript compiles: `npx tsc --noEmit`
 - [ ] No duplicate questionIds: `node -e "…"` (see tasks/todo.md)
-- [ ] Verified in browser for UI changes
+- [ ] Verified in browser (UI changes only — N/A otherwise)
+- [ ] code-reviewer subagent run on the latest commit, zero remaining comments
+- [ ] Maintainer has approved the merge in chat
 
 🤖 Generated with Claude Code
 EOF
@@ -68,7 +70,9 @@ EOF
 
 ### Step 4 – Auto-review (mandatory, automatic)
 
-The instant a PR is opened, spawn a `code-reviewer` subagent with the PR number — **without waiting to be asked**. Reviews are not on-demand; they are part of the PR-open action itself.
+The instant a PR is opened, spawn a `code-reviewer` subagent with the PR number — **without waiting to be asked**. Reviews are not on-demand; they are part of the PR-open action itself. Same rule applies to in-flight PRs opened under the prior workflow: from the next push forward they follow these rules.
+
+Invoke it from chat (or programmatically — the form below is illustrative):
 
 ```
 Agent({ subagent_type: "code-reviewer", prompt: "Review PR #<N> ..." })
@@ -92,19 +96,19 @@ After pushing fixes, re-spawn a fresh `code-reviewer` subagent with the same PR 
 
 ### Step 7 – Loop until clean
 
-Repeat steps 5–6 until the reviewer returns **zero remaining comments**. There is no manual exit condition — the reviewer's verdict is the gate.
+Repeat steps 5–6 until the reviewer returns **zero remaining comments**. The reviewer's verdict is the gate, with one override: if a comment is dismissed with concrete justification posted in the PR thread and a re-spawned reviewer raises the *same* point again, the maintainer may explicitly waive it in chat approval (§Step 8) — that waiver counts as resolved for that specific recurring comment only.
 
 ### Step 8 – Chat approval (the human gate)
 
-Once the reviewer is satisfied, post a concise summary in chat and **explicitly ask the maintainer to approve the merge**. Wait for an explicit "yes / approved / merge it" in chat. Do not infer approval from silence or from earlier instructions.
+Once the reviewer is satisfied (or only carries waived recurring comments per §Step 7), post a concise summary in chat and **explicitly ask the maintainer to approve the merge**. Wait for an unambiguous affirmative referencing this PR or commit — e.g. `"approve PR #N"`, `"merge it"`, `"lgtm"`, `"ship it"`, `"go ahead"` (non-exhaustive; the message must clearly bind to this PR and clearly mean go-ahead). Do not infer approval from silence, hedged language ("looks ok-ish", "maybe"), or from earlier instructions in the session.
 
 ### Step 9 – Merge rules
 
-- ✅ Reviewer subagent returned zero comments on the most recent run
+- ✅ Reviewer subagent returned zero comments (or only waived recurring comments) on the most recent run
 - ✅ Maintainer has approved the merge in chat (this PR, this commit)
 - ✅ `npx tsc --noEmit` passes with zero errors
 - ✅ No duplicate questionIds
-- ✅ UI changes verified in browser
+- ✅ UI changes verified in browser (UI changes only — N/A otherwise)
 - 🚫 Force-push to `master` is forbidden
 - 🚫 Direct push to `master` is forbidden
 - 🚫 GitHub approving review is **not** used as a gate — the maintainer reviews on `master` and would have to self-approve, which GitHub blocks. Chat approval replaces it.
