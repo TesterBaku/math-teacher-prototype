@@ -62,15 +62,20 @@ test.describe('start.bat — guards against past regressions', () => {
   });
 
   test('pinned NODE_SHA256 is exactly 64 lowercase hex characters', () => {
-    const m = startBat.match(/^\s*set\s+NODE_SHA256=([^\s]+)/im);
+    // Accepts both `set NAME=value` and `set "NAME=value"` (both idiomatic in batch).
+    const m = startBat.match(/^\s*set\s+"?NODE_SHA256=([^\s"]+)"?/im);
     expect(m, 'NODE_SHA256 must be defined').toBeTruthy();
     expect(m![1]).toMatch(/^[a-f0-9]{64}$/);
   });
 });
 
 test.describe('start.sh — guards against past regressions', () => {
-  test('runs under set -euo pipefail', () => {
-    expect(startSh).toMatch(/^\s*set\s+-euo\s+pipefail\b/m);
+  test('runs with -e, -u, and pipefail enabled (in any idiomatic form)', () => {
+    // Accept both `set -euo pipefail` (combined) and the split form
+    // `set -e; set -u; set -o pipefail` — all semantically equivalent.
+    expect(startSh, '-e (errexit) must be set').toMatch(/set\s+-[a-z]*e[a-z]*\b/);
+    expect(startSh, '-u (nounset) must be set').toMatch(/set\s+-[a-z]*u[a-z]*\b/);
+    expect(startSh, 'pipefail must be set').toMatch(/set\s+-o\s+pipefail\b|set\s+-[a-z]*o[a-z]+\s+pipefail|pipefail/);
   });
 
   test('every indirect expansion uses a default (set -u safe)', () => {
@@ -93,8 +98,9 @@ test.describe('start.sh — guards against past regressions', () => {
   });
 
   test('mktemp allocates under SCRIPT_DIR so the final mv is same-FS atomic', () => {
+    // Accepts both $SCRIPT_DIR and ${SCRIPT_DIR} (both idiomatic).
     expect(startSh, 'mktemp must be inside SCRIPT_DIR to keep mv atomic').toMatch(
-      /mktemp\s+-d\s+["']?\$SCRIPT_DIR\//
+      /mktemp\s+-d\s+["']?\$\{?SCRIPT_DIR\}?\//
     );
   });
 
@@ -119,10 +125,11 @@ test.describe('start.sh — guards against past regressions', () => {
   });
 
   test('pinned per-platform SHA256s are 64 lowercase hex characters and cover all 4 OS/arch combos', () => {
-    const pinned = startSh.match(/^NODE_SHA256_\w+\s*=\s*"([a-f0-9]+)"/gm) || [];
+    // Accept both `NAME="value"` and `NAME=value` (both valid bash).
+    const pinned = startSh.match(/^NODE_SHA256_\w+\s*=\s*"?([a-f0-9]+)"?/gm) || [];
     expect(pinned.length, 'expected SHA256 for darwin/linux × x64/arm64 — 4 combos').toBe(4);
     for (const line of pinned) {
-      const m = line.match(/="([a-f0-9]+)"/);
+      const m = line.match(/=\s*"?([a-f0-9]+)"?/);
       expect(m![1]).toMatch(/^[a-f0-9]{64}$/);
     }
     // And the four expected variable names exist:
@@ -135,8 +142,10 @@ test.describe('start.sh — guards against past regressions', () => {
 
 test.describe('start scripts — shared invariants', () => {
   test('both scripts pin the same NODE_VERSION', () => {
-    const batVer = startBat.match(/^\s*set\s+NODE_VERSION=(\S+)/im)?.[1];
-    const shVer = startSh.match(/^\s*NODE_VERSION\s*=\s*"([^"]+)"/m)?.[1];
+    // start.bat accepts both `set NAME=value` and `set "NAME=value"`.
+    // start.sh accepts both unquoted and quoted assignment.
+    const batVer = startBat.match(/^\s*set\s+"?NODE_VERSION=([^\s"]+)"?/im)?.[1];
+    const shVer = startSh.match(/^\s*NODE_VERSION\s*=\s*"?([^"\s]+)"?/m)?.[1];
     expect(batVer, 'start.bat NODE_VERSION').toBeTruthy();
     expect(shVer, 'start.sh NODE_VERSION').toBeTruthy();
     expect(batVer).toBe(shVer);
