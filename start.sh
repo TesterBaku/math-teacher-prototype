@@ -43,9 +43,11 @@ if ! command -v node &>/dev/null; then
   NODE_TAR="${NODE_PKG}.tar.xz"
   NODE_URL="https://nodejs.org/dist/${NODE_VERSION}/${NODE_TAR}"
 
-  # Look up the pinned SHA256 for this OS/arch combo.
+  # Look up the pinned SHA256 for this OS/arch combo. The :- default demotes
+  # an unset var to empty so the guard below runs (otherwise set -u kills us
+  # before we can emit the helpful "No pinned SHA256" message).
   sha_var="NODE_SHA256_${OS}_${ARCH}"
-  expected_sha="${!sha_var}"
+  expected_sha="${!sha_var:-}"
   if [ -z "$expected_sha" ]; then
     echo "No pinned SHA256 for ${OS}/${ARCH} — refusing to install Node.js."
     exit 1
