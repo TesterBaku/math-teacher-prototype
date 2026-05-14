@@ -4,8 +4,14 @@ title Math 5 - Server
 
 echo === Matematika 5 klass ===
 
-REM Pinned Node.js LTS (Jod). Update this single line to bump the bundled runtime.
+REM Pinned Node.js LTS (Jod). To bump the bundled runtime, update both lines
+REM below — the hash must be taken from the authoritative SHASUMS256.txt for
+REM that version (https://nodejs.org/dist/<version>/SHASUMS256.txt). Hardcoding
+REM (instead of fetching) defends against TLS-inspecting proxies common on
+REM school/corporate networks: an attacker can MITM both the .zip and the
+REM .txt fetched from the same host, but cannot rewrite this committed file.
 set NODE_VERSION=v22.11.0
+set NODE_SHA256=905373a059aecaf7f48c1ce10ffbd5334457ca00f678747f19db5ea7d256c236
 set NODE_DIR=node-%NODE_VERSION%-win-x64
 set NODE_ZIP=%NODE_DIR%.zip
 set NODE_URL=https://nodejs.org/dist/%NODE_VERSION%/%NODE_ZIP%
@@ -29,8 +35,9 @@ if %errorlevel% neq 0 (
   set "PS_ZIP=%NODE_ZIP%"
   set "PS_DIR=%NODE_DIR%"
   set "PS_DEST=%~dp0node-portable"
+  set "PS_SHA256=%NODE_SHA256%"
 
-  powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; $ErrorActionPreference='Stop'; try { $zip = Join-Path $env:PS_TEMP $env:PS_ZIP; $extract = Join-Path $env:PS_TEMP 'node-extract'; if (Test-Path $extract) { Remove-Item $extract -Recurse -Force }; if (Test-Path $env:PS_DEST) { Remove-Item $env:PS_DEST -Recurse -Force }; Invoke-WebRequest -Uri $env:PS_URL -OutFile $zip -UseBasicParsing; Expand-Archive -Path $zip -DestinationPath $extract -Force; Move-Item -Path (Join-Path $extract $env:PS_DIR) -Destination $env:PS_DEST -Force; Remove-Item $zip -Force; Remove-Item $extract -Recurse -Force; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
+  powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; $ErrorActionPreference='Stop'; try { $zip = Join-Path $env:PS_TEMP $env:PS_ZIP; $extract = Join-Path $env:PS_TEMP 'node-extract'; if (Test-Path $extract) { Remove-Item $extract -Recurse -Force }; if (Test-Path $env:PS_DEST) { Remove-Item $env:PS_DEST -Recurse -Force }; Invoke-WebRequest -Uri $env:PS_URL -OutFile $zip -UseBasicParsing; $actual = (Get-FileHash -Path $zip -Algorithm SHA256).Hash.ToLower(); $expected = $env:PS_SHA256.ToLower(); if ($actual -ne $expected) { Remove-Item $zip -Force -ErrorAction SilentlyContinue; throw \"SHA256 mismatch for $env:PS_ZIP. Expected $expected, got $actual.\" }; Expand-Archive -Path $zip -DestinationPath $extract -Force; Move-Item -Path (Join-Path $extract $env:PS_DIR) -Destination $env:PS_DEST -Force; Remove-Item $zip -Force; Remove-Item $extract -Recurse -Force; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
 
   if !errorlevel! neq 0 (
     echo.

@@ -3,8 +3,17 @@ set -euo pipefail
 
 echo "=== Matematika 5 klass ==="
 
-# Pinned Node.js LTS (Jod). Update this single line to bump the bundled runtime.
+# Pinned Node.js LTS (Jod). To bump the bundled runtime, update the version AND
+# the per-platform SHA256s below. Hashes come from the authoritative
+# SHASUMS256.txt for that version (https://nodejs.org/dist/<version>/SHASUMS256.txt).
+# Hardcoding (instead of fetching) defends against TLS-inspecting proxies common
+# on school/corporate networks: an attacker can MITM both the tarball and the
+# .txt fetched from the same host, but cannot rewrite this committed file.
 NODE_VERSION="v22.11.0"
+NODE_SHA256_darwin_x64="ab28d1784625d151e3f608a9412a009118f376118ed842ae643f8c2efdfb0af6"
+NODE_SHA256_darwin_arm64="c379a90c6aa605b74042a233ddcda4247b347ba5732007d280e44422cc8f9ecb"
+NODE_SHA256_linux_x64="83bf07dd343002a26211cf1fcd46a9d9534219aad42ee02847816940bf610a72"
+NODE_SHA256_linux_arm64="6031d04b98f59ff0f7cb98566f65b115ecd893d3b7870821171708cdbaf7ae6e"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Prefer a previously-extracted portable copy next to this script.
@@ -34,8 +43,18 @@ if ! command -v node &>/dev/null; then
   NODE_TAR="${NODE_PKG}.tar.xz"
   NODE_URL="https://nodejs.org/dist/${NODE_VERSION}/${NODE_TAR}"
 
-  # Locally named — TMPDIR is a standard POSIX env var; don't clobber it.
-  work_dir="$(mktemp -d)"
+  # Look up the pinned SHA256 for this OS/arch combo.
+  sha_var="NODE_SHA256_${OS}_${ARCH}"
+  expected_sha="${!sha_var}"
+  if [ -z "$expected_sha" ]; then
+    echo "No pinned SHA256 for ${OS}/${ARCH} — refusing to install Node.js."
+    exit 1
+  fi
+
+  # mktemp under SCRIPT_DIR so the final mv stays on the same filesystem and
+  # is therefore atomic (mv across filesystems falls back to copy+unlink and
+  # can leave a partially-populated destination if interrupted).
+  work_dir="$(mktemp -d "$SCRIPT_DIR/.node-install.XXXXXX")"
   trap 'rm -rf "$work_dir"' EXIT
 
   if command -v curl &>/dev/null; then
@@ -44,6 +63,20 @@ if ! command -v node &>/dev/null; then
     wget -q "$NODE_URL" -O "$work_dir/$NODE_TAR"
   else
     echo "Neither curl nor wget is available. Install Node.js manually from https://nodejs.org"
+    exit 1
+  fi
+
+  # Verify SHA256 before extract.
+  if command -v sha256sum &>/dev/null; then
+    actual_sha="$(sha256sum "$work_dir/$NODE_TAR" | awk '{print $1}')"
+  elif command -v shasum &>/dev/null; then
+    actual_sha="$(shasum -a 256 "$work_dir/$NODE_TAR" | awk '{print $1}')"
+  else
+    echo "Neither sha256sum nor shasum is available — refusing to install unverified Node.js."
+    exit 1
+  fi
+  if [ "$actual_sha" != "$expected_sha" ]; then
+    echo "SHA256 mismatch for $NODE_TAR. Expected $expected_sha, got $actual_sha."
     exit 1
   fi
 
