@@ -56,7 +56,7 @@ One paragraph: what changed and why.
 
 ## Checklist
 - [ ] TypeScript compiles: `npx tsc --noEmit`
-- [ ] No duplicate questionIds: `node -e "…"` (see tasks/todo.md)
+- [ ] No duplicate questionIds (question changes only — N/A otherwise)
 - [ ] Verified in browser (UI changes only — N/A otherwise)
 - [ ] code-reviewer subagent run on the latest commit, zero remaining comments
 - [ ] Maintainer has approved the merge in chat
@@ -91,6 +91,7 @@ The reviewer checks:
 
 - Push new commits to the **same branch** (do not open a new PR)
 - For each comment: either fix it, or post a reply **in the PR thread** (not in chat, not in the commit message) explaining the dismissal with concrete justification. The PR-thread location matters for the §Step 7 override path.
+- Subagent reviewers return findings to chat, not as GitHub review comments. If you intend to dismiss such a finding, first quote/paraphrase it as a top-level PR comment (`gh pr comment <N> -b "…"`), then post the dismissal reply under it. The §Step 7 override requires the dismissal be discoverable in the PR thread on a future cold review.
 
 ### Step 6 – Re-spawn the reviewer
 
@@ -115,7 +116,7 @@ Once the reviewer is satisfied (or only carries waived recurring comments per §
 - ✅ Reviewer subagent returned zero comments (or only waived recurring comments) on the most recent run
 - ✅ Maintainer has approved the merge in chat (this PR, this commit)
 - ✅ `npx tsc --noEmit` passes with zero errors
-- ✅ No duplicate questionIds
+- ✅ No duplicate questionIds (question changes only — N/A otherwise)
 - ✅ UI changes verified in browser (UI changes only — N/A otherwise)
 - 🚫 Force-push to `master` is forbidden
 - 🚫 Direct push to `master` is forbidden
