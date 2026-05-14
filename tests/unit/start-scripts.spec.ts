@@ -76,7 +76,10 @@ test.describe('start.sh — guards against past regressions', () => {
     // Anchored to line-start `set` so a comment / string mention doesn't pass.
     expect(startSh, '-e (errexit) must be set').toMatch(/^\s*set\s+-[a-z]*e[a-z]*\b/m);
     expect(startSh, '-u (nounset) must be set').toMatch(/^\s*set\s+-[a-z]*u[a-z]*\b/m);
-    expect(startSh, 'pipefail must be set').toMatch(/^\s*set\s+-o\s+pipefail\b|^\s*set\s+-[a-z]*o[a-z]+\s+pipefail\b/m);
+    // Matches both bare `set -o pipefail` and combined forms like
+    // `set -euo pipefail` or `set -uo pipefail`. The `-` then any letters
+    // including a mandatory `o`, then any letters, then `pipefail`.
+    expect(startSh, 'pipefail must be set').toMatch(/^\s*set\s+-[a-z]*o[a-z]*\s+pipefail\b/m);
   });
 
   test('every indirect expansion uses a default (set -u safe)', () => {
