@@ -34,20 +34,23 @@ if ! command -v node &>/dev/null; then
   NODE_TAR="${NODE_PKG}.tar.xz"
   NODE_URL="https://nodejs.org/dist/${NODE_VERSION}/${NODE_TAR}"
 
-  TMPDIR="$(mktemp -d)"
-  trap 'rm -rf "$TMPDIR"' EXIT
+  # Locally named — TMPDIR is a standard POSIX env var; don't clobber it.
+  work_dir="$(mktemp -d)"
+  trap 'rm -rf "$work_dir"' EXIT
 
   if command -v curl &>/dev/null; then
-    curl -fsSL "$NODE_URL" -o "$TMPDIR/$NODE_TAR"
+    curl -fsSL "$NODE_URL" -o "$work_dir/$NODE_TAR"
   elif command -v wget &>/dev/null; then
-    wget -q "$NODE_URL" -O "$TMPDIR/$NODE_TAR"
+    wget -q "$NODE_URL" -O "$work_dir/$NODE_TAR"
   else
     echo "Neither curl nor wget is available. Install Node.js manually from https://nodejs.org"
     exit 1
   fi
 
-  tar -xJf "$TMPDIR/$NODE_TAR" -C "$TMPDIR"
-  mv "$TMPDIR/$NODE_PKG" "$SCRIPT_DIR/node-portable"
+  tar -xJf "$work_dir/$NODE_TAR" -C "$work_dir"
+  # mv into an existing directory nests instead of replacing — clear first.
+  rm -rf "$SCRIPT_DIR/node-portable"
+  mv "$work_dir/$NODE_PKG" "$SCRIPT_DIR/node-portable"
 
   export PATH="$SCRIPT_DIR/node-portable/bin:$PATH"
   echo "Node.js installed locally at $SCRIPT_DIR/node-portable"
