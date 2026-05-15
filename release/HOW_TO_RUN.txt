@@ -1,0 +1,23 @@
+=== Matematika 5 klass — How to run ===
+
+START THE APP
+  Windows:        double-click start.bat
+  macOS / Linux:  open a terminal in this folder, then run:
+                  chmod +x start.sh && ./start.sh
+
+  The browser will open http://localhost:3000 automatically.
+
+NODE.JS
+  Not installed?  Don't worry — the start script will download a
+  portable copy (~30 MB) into ./node-portable/ on first run.
+  No admin rights required. No system-wide install. The download
+  is integrity-checked against a SHA256 hash bundled in the script.
+
+  Already installed?  The script will detect your system Node and
+  use it instead.
+
+STOP
+  Press Ctrl+C in the terminal / command prompt window.
+
+NOTE
+  This is a pre-built package. No npm install or build step is needed.
