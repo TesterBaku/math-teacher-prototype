@@ -12,13 +12,27 @@
 # either transform (rather than silently shipping a broken zip).
 
 [CmdletBinding()]
-param()
+param(
+  # Bypass the working-tree integrity check. Use only if you knowingly want
+  # to package locally-modified start scripts (e.g. testing a fix before
+  # committing it).
+  [switch] $Force
+)
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path "$PSScriptRoot\..").Path
 $outZip = Join-Path $repoRoot 'math-teacher-release.zip'
 
 Set-Location $repoRoot
+
+# Refuse to package locally-modified start scripts — a tampered or
+# half-edited start.bat / start.sh on disk would silently end up in the zip.
+if (-not $Force) {
+  & git diff --quiet -- start.bat start.sh
+  if ($LASTEXITCODE -ne 0) {
+    throw 'Working tree has uncommitted changes to start.bat / start.sh. Commit, stash, or rerun with -Force.'
+  }
+}
 
 Write-Host "→ Building Next.js standalone output..."
 & npm run build
@@ -80,13 +94,17 @@ foreach ($f in $required) {
 # Sanity: the release transforms actually applied. If a future start-script
 # refactor changes the patterns we strip, we want a build-time failure here
 # instead of a release zip that boots into `npm run build` for end users.
-if ($batRelease -match '(?m)^\s*call\s+npm\s+install\b' -or $batRelease -match '(?m)^\s*call\s+npm\s+run\s+build\b') {
+# `\b` not `^\s*` — catches single-line idioms like
+# `if not exist node_modules call npm install` where `call npm install` isn't
+# at line start. The cost is a false positive if a comment in the script
+# mentions `npm install` verbatim; we accept that for the regression-defense win.
+if ($batRelease -match '\bcall\s+npm\s+install\b' -or $batRelease -match '\bcall\s+npm\s+run\s+build\b') {
   throw 'start.bat transform left dev-only npm install / npm run build in place — regex did not match. Inspect repo-root start.bat for changes.'
 }
 if ($batRelease -notmatch [regex]::Escape('node "%~dp0server.js"')) {
   throw 'start.bat transform did not re-point the node invocation at server.js'
 }
-if ($shRelease -match '(?m)^\s*npm\s+install\b' -or $shRelease -match '(?m)^\s*npm\s+run\s+build\b') {
+if ($shRelease -match '\bnpm\s+install\b' -or $shRelease -match '\bnpm\s+run\s+build\b') {
   throw 'start.sh transform left dev-only npm install / npm run build in place'
 }
 if ($shRelease -notmatch [regex]::Escape('node "$SCRIPT_DIR/server.js"')) {

@@ -5,9 +5,6 @@ node_modules/
 node-portable/
 .node-install.*/
 
-# Release artifact built by release/build.ps1 (uploaded to GitHub Releases)
-math-teacher-release.zip
-
 # Next.js
 .next/
 out/
